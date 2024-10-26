@@ -12,6 +12,8 @@
 #include "mouseManager.h"
 
 #include "globalCommandPoints.h"
+#include "button.h"
+#pragma warning(suppress : 6387)
 
 commandPoints CP;
 
@@ -32,6 +34,7 @@ int main() {
 	keypad(stdscr, TRUE);
 	/*mousemask(ALL_MOUSE_EVENTS, NULL);*/
 	mouse_set(ALL_MOUSE_EVENTS);
+	mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
 	           // Move to the specified coordinates
 
 	
@@ -75,14 +78,34 @@ int main() {
 	mouseManager MouseM;
 	draw(winMain, TestTerm.getTile(), TC.getTerm(0)->getX(), TC.getTerm(0)->getY());
 	wrefresh(winMain);
+
+	button BtnForward("Forward", 5, 5,winButton);
+
+	mvwprintw(winButton, BtnForward.getY(), BtnForward.getX(), BtnForward.getText());
+	
+	wrefresh(winButton);
 	while (1) {
 		
-		if (MouseM.update() && TC.isTermHere(MouseM.getX(), MouseM.getY())) {
-			terminator * TP = TC.getTerm(MouseM.getX(), MouseM.getY());
-			TP->setX(TP->getX() + 2);
-			draw(winMain, TP->getTile(), TP->getX(), TP->getY());
-			wrefresh(winMain);
+		
+		if (MouseM.clickUpdate()&& MouseM.overWindow(winButton)) {
+			int x, y;
+			wmouse_position(winButton, &x, &y);
+			if (BtnForward.isClicked(x,y)) {
+				BtnForward.clicked();
+				if (TC.moveTerm(winMain, 2, 0)) {
+					
+					draw(winMain, TC.getCurrentTerm()->getTile(), TC.getCurrentTerm()->getX(), TC.getCurrentTerm()->getY());
+					wrefresh(winMain);
+				}
+			}
+			wrefresh(winButton);
 		}
+
+
+		if (MouseM.clickUpdate() && TC.isTermHere(MouseM.getX(), MouseM.getY())) {
+			TC.setCurrentTerm(TC.getTerm(MouseM.getX(), MouseM.getY())) ;			
+		}
+		
 		
 	};
 	/*while (true) {

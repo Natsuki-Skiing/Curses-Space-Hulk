@@ -3,6 +3,9 @@
 void terminatorController::addTerminator(terminator newTerm) {
 	this->Terminators.push_back(newTerm);
 	this->termMap.insert({ toIndex(newTerm.getX(), newTerm.getY()), &this->Terminators.back()});
+	if (Terminators.size() == 1) {
+		this->CurrentTerm = &Terminators[0];
+	}
 }
 
 
@@ -40,7 +43,8 @@ bool terminatorController::moveTerm(WINDOW * window,int x, int y) {
 	//For now this is allways true because i havent made the map yet 
 	bool canMove = true; 
 	
-
+	x += CurrentTerm->getX();
+	y += CurrentTerm->getY();
 	int xDiff = std::abs(x - CurrentTerm->getX());
 	int yDiff =-std::abs(y - CurrentTerm->getY());
 	if (canMove) {
@@ -53,6 +57,8 @@ bool terminatorController::moveTerm(WINDOW * window,int x, int y) {
 			termMap.erase(it);
 
 			termMap[toIndex(x, y)] = tempPointer;
+			CurrentTerm->setX(x);
+			CurrentTerm->setY(y);
 			canMove = true;
 		}
 		else {
@@ -64,4 +70,12 @@ bool terminatorController::moveTerm(WINDOW * window,int x, int y) {
 
 	return(canMove);
 
+}
+
+void terminatorController::setCurrentTerm(terminator* Term) {
+	this->CurrentTerm = Term; 
+}
+
+terminator* terminatorController::getCurrentTerm() {
+	return(this->CurrentTerm);
 }

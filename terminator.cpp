@@ -6,6 +6,7 @@ terminator::terminator(int x, int y, std::string name, int AP, weapon Weapon) {
 	this->name = name;
 	this->AP = AP;
 	this->Weapon = Weapon;
+	this->direction = 0;
 }
 
 int terminator::getX() {
@@ -63,4 +64,29 @@ bool terminator::apCheck(int amount) {
 	else {
 		return(false);
 	}
+}
+
+void terminator::turnLeft() {
+	if (direction == 0) {
+		direction = 3;
+	}
+	else {
+		direction -= 1;
+
+	}
+}
+
+void terminator::turnRight() {
+	if (direction == 3) {
+		direction = 0;
+	}
+	else {
+		direction += 1;
+
+	}
+}
+
+
+int terminator::getDirection() {
+	return(this->direction);
 }

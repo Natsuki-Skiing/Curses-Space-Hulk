@@ -12,7 +12,9 @@ class terminator {
 		int AP;
 		weapon Weapon;
 		tile Char{ 'T', 1 };
-
+		// 0 = North , 2 = South
+		int direction;
+		char prevTile;
 	public:
 		terminator(int x, int y, std::string name, int AP, weapon Weapon);
 		int getX();
@@ -33,8 +35,13 @@ class terminator {
 		bool apCheck(int cost);
 	
 
+		void turnLeft();
+		void turnRight();
 
+		int getDirection();
 
+		void setDirection(int newDir);
 
+		
 };
 	
