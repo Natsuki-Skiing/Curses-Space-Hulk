@@ -38,33 +38,39 @@ int terminatorController::toIndex(int x, int y) {
 	return(std::stoi((std::to_string(x) + std::to_string(y))));
 }
 
-bool terminatorController::moveTerm(WINDOW * window,int x, int y) {
+bool terminatorController::moveTerm(WINDOW * window,int x, int y, map * Map) {
 	//i like having one exit functions when i can be bothered to do so, this is for that 
 	//For now this is allways true because i havent made the map yet 
 	bool canMove = true; 
-	
-	x += CurrentTerm->getX();
-	y += CurrentTerm->getY();
-	int xDiff = std::abs(x - CurrentTerm->getX());
-	int yDiff =-std::abs(y - CurrentTerm->getY());
-	if (canMove) {
-		// checking to see if theres enough ap to make the desired move
-		if (CurrentTerm->apCheck((xDiff + yDiff))) {
-			// Updating the unordered map 
-			auto it = termMap.find(toIndex(CurrentTerm->getX(), CurrentTerm->getY()));
-			terminator * tempPointer = it->second;
+	if (!(Map->getTile(x + CurrentTerm->getX(), y + CurrentTerm->getY())->isWalkable())) {
+		canMove = false;
+	}
+	else {
+		x += CurrentTerm->getX();
+		y += CurrentTerm->getY();
+		int xDiff = std::abs(x - CurrentTerm->getX());
+		int yDiff = -std::abs(y - CurrentTerm->getY());
+		if (canMove) {
+			// checking to see if theres enough ap to make the desired move
+			if (CurrentTerm->apCheck((xDiff + yDiff))) {
+				// Updating the unordered map 
+				auto it = termMap.find(toIndex(CurrentTerm->getX(), CurrentTerm->getY()));
+				terminator* tempPointer = it->second;
 
-			termMap.erase(it);
+				termMap.erase(it);
 
-			termMap[toIndex(x, y)] = tempPointer;
-			CurrentTerm->setX(x);
-			CurrentTerm->setY(y);
-			canMove = true;
-		}
-		else {
-			canMove = false;
+				termMap[toIndex(x, y)] = tempPointer;
+				CurrentTerm->setX(x);
+				CurrentTerm->setY(y);
+				canMove = true;
+			}
+			else {
+				canMove = false;
+			}
 		}
 	}
+	
+	
 	
 
 

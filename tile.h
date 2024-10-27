@@ -6,13 +6,16 @@ class tile {
 	protected:
 		
 		char character;
-		std::string colour;
+
 		int colourPair;
+		bool walkable;
 	public:
-		std::string getColour();
+		tile();
 		char getChar();
 		int getColourPair();
-		tile(char character, std::string colour);
+		tile(char character, int colPair, bool walkable);
 		tile(char character, int colPair);
-
+		bool isWalkable();
+		void setWalkable(bool value);
+		
 };

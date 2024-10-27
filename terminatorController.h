@@ -5,6 +5,7 @@
 #include<string>
 #include <curses.h>
 #include <cstdlib>
+#include "map.h"
 class terminatorController {
 	private:
 		std::vector<terminator>  Terminators;
@@ -20,7 +21,7 @@ class terminatorController {
 		void removeTerm(int index);// Not sure if this is the way i want to do this
 		terminator* getTerm(int index);// Getiing the terminator streight from the vector without using the map 
 		//Move a terminator, checks to see if blocked 
-		bool moveTerm(WINDOW *,int x, int y);
+		bool moveTerm(WINDOW *,int x, int y,map * Map);
 		terminator* getCurrentTerm();
 		void setCurrentTerm(terminator *);
 		

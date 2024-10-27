@@ -8,6 +8,7 @@
 #include <iostream>
 #include "terminatorController.h"
 #include "draw.h"
+#include "map.h"
 
 #include "mouseManager.h"
 
@@ -37,12 +38,14 @@ int main() {
 	mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
 	           // Move to the specified coordinates
 
-	
+	//Colors for the game 
 	init_pair(1, COLOR_RED, COLOR_BLACK);
 	init_pair(2, COLOR_MAGENTA, COLOR_BLACK);
-	attron(COLOR_PAIR(1));
+	init_pair(3, COLOR_GREEN, COLOR_BLACK);
+	init_pair(4, COLOR_YELLOW, COLOR_BLACK);
 	
-
+	map TestMap("map_1", 50, 100);
+	
 	
 	
 	refresh();
@@ -50,6 +53,7 @@ int main() {
 	resize_term(100, 150);
 	/*this is the main window where the graphics of the game will be drawn and the user will intereact with the terminators/ genestealers*/
 	WINDOW* winMain = newwin(50, 100, 0, 0);
+	TestMap.displayMap(winMain);
 	wrefresh(winMain);
 	//This is how the player controls the terminator
 	WINDOW* winButton = newwin(10, 100, 51, 0);
@@ -64,7 +68,7 @@ int main() {
 	wrefresh(winInfo);
 
 	mvwaddch(winMain,20,20,'|');
-	mvwaddch(winMain, 19, 21, '_');
+	mvwaddch(winMain, 19, 21, '-');
 	mvwaddch(winMain, 19, 22, '_');
 	mvwaddch(winMain, 19, 23, '_');
 	mvwaddch(winMain, 22, 21, '_');
