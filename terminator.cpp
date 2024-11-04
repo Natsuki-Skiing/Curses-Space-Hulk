@@ -7,6 +7,8 @@ terminator::terminator(int x, int y, std::string name, int AP, weapon Weapon) {
 	this->AP = AP;
 	this->Weapon = Weapon;
 	this->direction = 0;
+	this->prevTile = new tile('B', -1, false);
+	this->overWatch = false;
 }
 
 int terminator::getX() {
@@ -89,4 +91,21 @@ void terminator::turnRight() {
 
 int terminator::getDirection() {
 	return(this->direction);
+}
+
+tile* terminator::getPreviousTile() {
+	return(this->prevTile);
+}
+
+void terminator::setPreviousTile(tile* prevTile) {
+	this->prevTile = prevTile;
+}
+
+
+bool terminator::isOverWatch() {
+	return(this->overWatch);
+}
+
+void terminator::setOverWatch(bool value) {
+	this->overWatch = value;
 }
