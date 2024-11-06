@@ -2,7 +2,11 @@
 
 void terminatorController::addTerminator(terminator newTerm) {
 	this->Terminators.push_back(newTerm);
-	this->termMap.insert({ toIndex(newTerm.getX(), newTerm.getY()), &this->Terminators.back()});
+	this->termMap.clear();
+	for (int index = 0; index < Terminators.size(); index++) {
+		this->termMap.insert({ toIndex(Terminators[index].getX(), Terminators[index].getY()), &this->Terminators[index]});
+	}
+	
 	if (Terminators.size() == 1) {
 		this->CurrentTerm = &Terminators[0];
 	}
@@ -42,24 +46,33 @@ bool terminatorController::moveTerm(WINDOW * window,int x, int y, map * Map) {
 	//i like having one exit functions when i can be bothered to do so, this is for that 
 	//For now this is allways true because i havent made the map yet 
 	bool canMove = true; 
-	if (!(Map->getTile(x + CurrentTerm->getX(), y + CurrentTerm->getY())->isWalkable())) {
+	if ((Map->getTile(x + CurrentTerm->getX(), y + CurrentTerm->getY())->isWalkable())&&(isTermHere(x + CurrentTerm->getX(), y + CurrentTerm->getY()))) {
 		canMove = false;
 	}
-	else {
-		x += CurrentTerm->getX();
-		y += CurrentTerm->getY();
-		int xDiff = std::abs(x - CurrentTerm->getX());
-		int yDiff = -std::abs(y - CurrentTerm->getY());
+	else if(canMove) {
+		
+		//int xDiff = std::abs(x - CurrentTerm->getX());
+		//int yDiff = std::abs(y - CurrentTerm->getY());
 		if (canMove) {
 			// checking to see if theres enough ap to make the desired move
-			if (CurrentTerm->apCheck((xDiff + yDiff))) {
+			if (CurrentTerm->apCheck((x + y))) {
 				// Updating the unordered map 
 				auto it = termMap.find(toIndex(CurrentTerm->getX(), CurrentTerm->getY()));
 				terminator* tempPointer = it->second;
 
 				termMap.erase(it);
 
-				termMap[toIndex(x, y)] = tempPointer;
+				termMap[toIndex(x+ CurrentTerm->getX(), y+ CurrentTerm->getY())] = tempPointer;
+				
+				
+				// reDrawing the previous map tile
+				draw(window, CurrentTerm->getPreviousTile(), CurrentTerm->getX(), CurrentTerm->getY());
+
+				//setting new previous tile
+				this->CurrentTerm->setPreviousTile(Map->getTile(x + CurrentTerm->getX(), y + CurrentTerm->getY()));
+				x += CurrentTerm->getX();
+				y += CurrentTerm->getY();
+
 				CurrentTerm->setX(x);
 				CurrentTerm->setY(y);
 				canMove = true;
