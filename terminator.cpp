@@ -109,3 +109,9 @@ bool terminator::isOverWatch() {
 void terminator::setOverWatch(bool value) {
 	this->overWatch = value;
 }
+
+void terminator::setDirection(int value) {
+	if (value >= 0 && value <= 4) {
+		this->direction = value;
+	}
+}
